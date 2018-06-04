@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -74,10 +72,35 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase();
 
-            if (aValue.contains(value)) {
+            if (aValue.contains(value.toLowerCase())) {
                 jobs.add(row);
+            }
+        }
+
+        return jobs;
+    }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> job : allJobs) {
+
+            Iterator it = job.entrySet().iterator();
+            boolean searching = true;
+
+            while (searching && it.hasNext()) {
+                Map.Entry<String, String> pair = (Map.Entry<String, String>)it.next();
+
+                String aValue = pair.getValue().toLowerCase();
+                if (aValue.contains(value.toLowerCase())) {
+
+                    jobs.add(job);
+                    searching = false;
+                }
             }
         }
 
@@ -106,6 +129,7 @@ public class JobData {
             allJobs = new ArrayList<>();
 
             // Put the records into a more friendly format
+            //Project Coordinator Support,Maritz,Saint Louis,Technical Assistant / User Support,Non-coding
             for (CSVRecord record : records) {
                 HashMap<String, String> newJob = new HashMap<>();
 

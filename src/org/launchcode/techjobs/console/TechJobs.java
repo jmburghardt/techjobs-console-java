@@ -1,7 +1,9 @@
 package org.launchcode.techjobs.console;
 
+import javax.print.attribute.HashPrintJobAttributeSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -54,16 +56,17 @@ public class TechJobs {
             } else { // choice is "search"
 
                 // How does the user want to search (e.g. by skill or employer)
-                String searchField = getUserSelection("Search by:", columnChoices);
+                String searchField = getUserSelection("Search by:", columnChoices).toLowerCase();
 
                 // What is their search term?
                 System.out.println("\nSearch term: ");
-                String searchTerm = in.nextLine();
+                String searchTerm = in.nextLine(); //.toLowerCase();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
+                    //System.out.println("Search all fields not yet implemented.");
                 } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    printJobs(JobData.findByColumnAndValue(searchField.toLowerCase(), searchTerm.toLowerCase()));
                 }
             }
         }
@@ -75,7 +78,6 @@ public class TechJobs {
         Integer choiceIdx;
         Boolean validChoice = false;
         String[] choiceKeys = new String[choices.size()];
-
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
         Integer i = 0;
@@ -111,6 +113,47 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
-    }
+        if (someJobs.isEmpty()) {
+            System.out.println("That is not in our database! Please try again.");
+        }
+        //print selection
+        /*
+        *****
+        position type: Data Scientist / Business Intelligence
+        name: Sr. IT Analyst (Data/BI)
+        employer: Bull Moose Industries
+        location: Saint Louis
+        core competency: Statistical Analysis
+        *****
+        *
+        * Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        * for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+        *   System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue()); }
+        */
+
+        for(HashMap<String, String> chosenJob : someJobs) {
+
+            System.out.println("\n*****");
+
+            String positionType = chosenJob.get("position type");
+            String name = chosenJob.get("name");
+            String employer = chosenJob.get("employer");
+            String location = chosenJob.get("location");
+            String coreCompentency = chosenJob.get("core competency");
+
+            //for ()
+            System.out.println("position type: " + positionType);
+            System.out.println("name: " + name);
+            System.out.println("employer: " + employer);
+            System.out.println("location: " + location);
+            System.out.println("core competency: " + coreCompentency);
+
+            System.out.println("*****");
+
+            }
+        }
 }
+
+
+
+
